@@ -6,7 +6,7 @@ This project aims to create an open-source homemade penlight for various concert
 
 #### Shoutouts
 Shoutouts to:
-rico132 (for helping with Fusion 360 and helping in fixing electronics)
-CaptainMeow (for the Otomo drawing on the PCB design)
-Dominik K
-KFP & the general VTubing community 
+- rico132 (for helping with Fusion 360 and helping in fixing electronics)
+- CaptainMeow (for the Otomo drawing on the PCB design)
+- Dominik K
+- KFP & the general VTubing community 
