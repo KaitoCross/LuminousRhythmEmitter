@@ -1,0 +1,150 @@
+esphome:
+  name: luminousrhythmemitter
+
+esp32:
+  board: seeed_xiao_esp32c3
+  framework:
+    type: esp-idf
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: "password"
+
+ota:
+  - platform: esphome
+    password: "password"
+
+wifi:
+  enable_on_boot: true
+  ssid: "WiFi"
+  password: "password"
+  reboot_timeout: 4h
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "luminousrhythmemitter"
+    password: "password"
+captive_portal:
+
+globals:
+   - id: color_presets
+     type: int[13]
+     restore_value: yes
+     initial_value: '{0xde0106,0xe05c9d,0xff57b2,0x00e6ff,0x00ff21,0xffff00,0xff0088,0x7900ff,0x57ff00,0xff6600,0xffffff,0x003fff,0x000000}'
+   - id: current_preset
+     type: int
+     restore_value: yes
+     initial_value: '0'
+
+output:
+  - platform: ledc
+    pin: GPIO3
+    id: led_r
+    #Max percentage (66,66%) ^ gamma correction = max power
+    #max_power: 90%
+    
+  - platform: ledc
+    pin: GPIO4
+    id: led_g
+    max_power: 61.2%
+    
+  - platform: ledc
+    pin: GPIO2
+    id: led_b
+    max_power: 61.2% 
+
+light:
+  - platform: rgb
+    name: "Penlight LED"
+    id: pen_rgb
+    gamma_correct: 2.2
+    red: led_r
+    green: led_g
+    blue: led_b
+    #color_correct: [0.66666666, 0.33333333, 1.0]
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO5
+      mode:
+        input: true
+        pullup: true
+      inverted: true
+    filters:
+      - delayed_on_off: 30ms
+      #- delayed_off: 30ms
+    name: "LED Button"
+    interrupt_type: ANY
+    on_click:
+    - min_length: 10s
+      max_length: 15s
+      then:
+        - lambda: |-
+            ESP_LOGD("binary_sensor", "lambda start");
+        - wifi.enable:
+    - min_length: 0s
+      max_length: 2s
+      then:
+        - lambda: |-
+            auto preset_len = sizeof(id(color_presets));
+            auto var_len = sizeof(int);
+            int curr = id(current_preset);
+            id(current_preset) = ((curr + 1) % (preset_len/var_len));
+            if (curr == 0) {
+              auto call = id(pen_rgb).turn_off();
+              call.perform();
+            }
+            else {
+              auto r = (id(color_presets)[curr] & 0xFF0000) >> 16;
+              auto g = (id(color_presets)[curr] & 0x00FF00) >> 8;
+              auto b = (id(color_presets)[curr] & 0x0000FF);
+              auto call = id(pen_rgb).turn_on();
+              call.set_rgb(static_cast<float>(r)/255.0,static_cast<float>(g)/255.0,static_cast<float>(b)/255.0);
+              call.perform();
+            }
+          
+
+esp32_ble_server:
+  manufacturer: "KaitoCross"
+  model: "Luminous Rhythm Emitter"
+  services:
+    - uuid: 759297ad-ad74-4eb2-af4b-d94332ec6b7d
+      advertise: true
+      characteristics:
+       - uuid: b4cb7b26-407c-4040-b992-00325d97f517
+         write: true
+         value:
+           data: [255,255,255]
+         on_write:
+           then:
+            - lambda: |-
+                  float red = 0.0f;
+                  float green = 0.0f;
+                  float blue = 0.0f;
+
+                  if (x.size() >= 3) {
+                    if (x[0] > 0)
+                      red = x[0] / 255.0f;
+                    if (x[1] > 0)
+                      green = x[1] / 255.0f;
+                    if (x[2] > 0)
+                      blue = x[2] / 255.0f;
+                  }
+                  if ((red == 0.0f) && (green == 0.0f) && (blue == 0.0f)) {
+                    auto call = id(pen_rgb).turn_off();
+                    call.perform();
+                  }
+                  else {
+                    auto call = id(pen_rgb).turn_on();
+                    call.set_rgb(red, green, blue);
+                    call.perform();
+                  }
+            - lambda: |-
+                  ESP_LOGD("ble", "Received BLE data (length: %d):", x.size());
+                  for (int i = 0; i < x.size(); i++) {
+                    ESP_LOGD("ble", "Byte %d: 0x%02X", i, x[i]);
+                  }
