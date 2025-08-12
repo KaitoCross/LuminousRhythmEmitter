@@ -2760,7 +2760,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10"
+		(property "Value" "5"
 			(at 111.76 31.7499 0)
 			(effects
 				(font
@@ -3178,7 +3178,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10"
+		(property "Value" "5"
 			(at 127 31.7499 0)
 			(effects
 				(font
