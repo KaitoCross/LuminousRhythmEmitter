@@ -1,5 +1,17 @@
 esphome:
   name: luminousrhythmemitter
+  on_boot:
+    priority: -100.0
+    then:
+     - lambda: |-
+         auto curr_col = id(color_presets)[0];
+         id(current_preset) = 1;
+         auto r = (curr_col & 0xFF0000) >> 16;
+         auto g = (curr_col & 0x00FF00) >> 8;
+         auto b = (curr_col & 0x0000FF);
+         auto call = id(pen_rgb).turn_on();
+         call.set_rgb(static_cast<float>(r)/255.0,static_cast<float>(g)/255.0,static_cast<float>(b)/255.0);
+         call.perform();
 
 esp32:
   board: seeed_xiao_esp32c3
@@ -94,14 +106,15 @@ binary_sensor:
             auto var_len = sizeof(int);
             int curr = id(current_preset);
             id(current_preset) = ((curr + 1) % (preset_len/var_len));
-            if (curr == 0) {
+            auto curr_col = id(color_presets)[curr];
+            if (curr_col == 0) {
               auto call = id(pen_rgb).turn_off();
               call.perform();
             }
             else {
-              auto r = (id(color_presets)[curr] & 0xFF0000) >> 16;
-              auto g = (id(color_presets)[curr] & 0x00FF00) >> 8;
-              auto b = (id(color_presets)[curr] & 0x0000FF);
+              auto r = (curr_col & 0xFF0000) >> 16;
+              auto g = (curr_col & 0x00FF00) >> 8;
+              auto b = (curr_col & 0x0000FF);
               auto call = id(pen_rgb).turn_on();
               call.set_rgb(static_cast<float>(r)/255.0,static_cast<float>(g)/255.0,static_cast<float>(b)/255.0);
               call.perform();
