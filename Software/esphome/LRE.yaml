@@ -33,7 +33,7 @@ wifi:
   enable_on_boot: true
   ssid: "WiFi"
   password: "password"
-  reboot_timeout: 4h
+  reboot_timeout: 14400s #4h
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
