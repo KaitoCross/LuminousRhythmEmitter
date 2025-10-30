@@ -22,8 +22,8 @@ esp32:
 logger:
 
 # Enable Home Assistant API
-api:
-  password: "password"
+#api:
+#  password: "password"
 
 ota:
   - platform: esphome
@@ -33,7 +33,7 @@ wifi:
   enable_on_boot: true
   ssid: "WiFi"
   password: "password"
-  reboot_timeout: 14400s #4h
+  reboot_timeout: 0s
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
