@@ -5,9 +5,16 @@
 - Button: generic 6x6mm pushbutton (with rather flat button)
 - 20mm ø LED Lens (45° or 60°, testing), max 11mm high
 - The custom printed PCB
-- 2x 6-Pin 2.54mm Dupont female pin header (for PCB)
+- 2x 6-Pin 2.54mm Dupont female pin header
+- 2x 6-Pin 2.54mm Dupont male pin header
+- If PCB is not pre-assembled:
+    - 1x Inolux IN-P55TATRGB
+    - 3x S8050 (SMD type SOT-23)
+    - SMD type 1206 resistors:
+        - 3x 15,5 kOhm (or slightly lower)
+        - 2x 5 Ohm
+        - 1x 65 Ohm
 - battery contacts (with spring)
-- parts for the PCB as listed in circuit design
 - (optional) 100 mm 2,4 Ghz Antenna
 - an LED light diffusion filter. Dimensions: 9,5cm x 14,5cm  (15.1mm inner cylinder radius)
   Recommendations: 
