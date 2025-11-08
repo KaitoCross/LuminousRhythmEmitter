@@ -60,6 +60,8 @@ Connect two wires to the J4 holes on the PCB. Connect both wires to the pushbutt
 
 ## Assembly
 
+3D-print all parts in the [`3D` folder](../3D). Print settings recommendations [are also provided.](../3D/print_settings.md) Some cutouts (mainly for the buttons) need to be sanded for a better fit.
+
 Connect the PCB and the XIAO through the pin headers.
 
 [Install the firmware on the XIAO](../Software/README.md) and test it.
@@ -68,7 +70,7 @@ Start with the half with the rectangular cutout on the top. Place the PCB on top
 
 To make working with the pushbutton easier, you need to straighten the unused legs, aligning them with the case of the button itself. Now, pull the pushbutton though the D-shaped hole, with the wires facing the wall. Place the button cap on the pushbutton. Put the rectangular power switch into it's holder near the XIAO.
 
-Now, put the lens into the lens holder witht the flat side of the lens facing the small end of the holder. Push it all the way in. Place the lens holder on top of the PCB.
+Now, put the lens into the lens holder with the flat side of the lens facing the small end of the holder. Push it all the way in. Place the lens holder on top of the PCB.
 
 Now put the other half of the penlight base on top and close the case, making sure the buttons fit into the other half as well. Then you can screw on the top part. Into the top part, you can then place your light diffusion filter. You can then close the top part by screwing on the respective cap.
 
