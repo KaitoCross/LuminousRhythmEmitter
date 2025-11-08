@@ -53,18 +53,18 @@ output:
   - platform: ledc
     pin: GPIO3
     id: led_r
-    #Max percentage (66,66%) ^ gamma correction = max power. to be adjusted soon.
-    #max_power: 90%
+    #Max percentage (66,66%) ^ gamma correction = max power
+    max_power: 90%
     
   - platform: ledc
     pin: GPIO4
     id: led_g
-    #max_power: 61.2%
+    max_power: 70%
     
   - platform: ledc
     pin: GPIO2
     id: led_b
-    #max_power: 61.2% 
+    max_power: 50%
 
 light:
   - platform: rgb
