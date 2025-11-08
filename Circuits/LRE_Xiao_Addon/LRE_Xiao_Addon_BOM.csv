@@ -1,0 +1,7 @@
+Reference,Value,Datasheet,Footprint,Qty,DNP
+D5,Inolux_IN-P55TATRGB,https://www.inolux-corp.com/datasheet/SMDLED/RGB%20Top%20View/IN-P55TATRGB.pdf,LED_SMD:LED_Inolux_IN-P55TATRGB_PLCC6_5.0x5.5mm_P1.8mm,1,
+"J1,J3",Conn_01x06_Socket,~,Connector_PinSocket_2.54mm:PinSocket_1x06_P2.54mm_Vertical,2,
+"Q1,Q2,Q3",S8050,https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/7158/5272_S8050.pdf,Package_TO_SOT_SMD:SOT-23,3,
+"R1,R2,R3",15500,~,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,3,
+"R4,R6",5,~,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,2,
+R5,65,~,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,1,
