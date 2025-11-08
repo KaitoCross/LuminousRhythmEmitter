@@ -21,28 +21,26 @@ esp32:
 # Enable logging
 logger:
 
-# Enable Home Assistant API
-#api:
-#  password: "password"
 
+# change password, set a custom one!
 ota:
   - platform: esphome
     password: "password"
 
-wifi:
-  enable_on_boot: true
+wifi: # If you want it to be available via WiFi, put your credentials here and set enable_on_boot to true
+  enable_on_boot: false
   ssid: "WiFi"
   password: "password"
   reboot_timeout: 0s
 
-  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  # Enable fallback hotspot (captive portal) in case wifi connection fails. Change password to custom one here as well
   ap:
     ssid: "luminousrhythmemitter"
     password: "password"
 captive_portal:
 
 globals:
-   - id: color_presets
+   - id: color_presets # If you want more colors on your penlight, add them to initial_value as hex value and adjust the number in type (increasing or decreasing). Color 0x000000 turns off the LED
      type: int[13]
      restore_value: yes
      initial_value: '{0xff0000,0xe05c9d,0xff57b2,0x00e6ff,0x00ff21,0xffff00,0xff0088,0x7900ff,0x57ff00,0xff6600,0xffffff,0x003fff,0x000000}'
@@ -55,18 +53,18 @@ output:
   - platform: ledc
     pin: GPIO3
     id: led_r
-    #Max percentage (66,66%) ^ gamma correction = max power
+    #Max percentage (66,66%) ^ gamma correction = max power. to be adjusted soon.
     #max_power: 90%
     
   - platform: ledc
     pin: GPIO4
     id: led_g
-    max_power: 61.2%
+    #max_power: 61.2%
     
   - platform: ledc
     pin: GPIO2
     id: led_b
-    max_power: 61.2% 
+    #max_power: 61.2% 
 
 light:
   - platform: rgb
