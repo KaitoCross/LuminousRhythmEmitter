@@ -14,8 +14,8 @@
   - 3x S8050 (SMD type SOT-23)
   - SMD type 1206 resistors:
     - 3x 15,5 kOhm (or slightly lower)
-    - 2x 5 Ohm
-    - 1x 65 Ohm (or slightly higher)
+    - 2x 10,8 Ohm (or slightly higher)
+    - 1x 60,5 Ohm (or slightly higher)
 - battery contacts (with spring)
 - (optional) 100 mm 2,4 Ghz Antenna
 - an LED light diffusion filter. Dimensions: 9,5cm x 14,5cm  (15.1mm inner cylinder radius)
