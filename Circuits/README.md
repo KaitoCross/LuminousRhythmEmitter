@@ -7,8 +7,8 @@
 - 20mm ø LED Lens (45° or 60°, testing), max 11mm high
 - The custom printed PCB
   - I recommend ordering the custom PCB through JLCPCB
-- 2x 6-Pin 2.54mm Dupont female pin header
-- 2x 6-Pin 2.54mm Dupont male pin header
+- 2x 6-Pin 2.54mm Dupont female pin header (socket 8mm high)
+- 2x 6-Pin 2.54mm Dupont male pin header (pin 6mm high)
 - If PCB is not pre-assembled:
   - 1x Inolux IN-P55TATRGB
   - 3x S8050 (SMD type SOT-23)
