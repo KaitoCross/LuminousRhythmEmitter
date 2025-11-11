@@ -3,19 +3,19 @@
 - Seeed Studio XIAO ESP32C3
 - power switch: MFP 120 by Knitter-Switch
 - Any 18350 Li-ion battery with a **protection circuit** (preventing deep discharge)
-- Button: generic 6x6mm pushbutton (with rather flat button)
+- Button: generic 6x6x5mm pushbutton
 - 20mm ø LED Lens (45° or 60°, testing), max 11mm high
 - The custom printed PCB
   - I recommend ordering the custom PCB through JLCPCB
-- 2x 6-Pin 2.54mm Dupont female pin header (socket 8mm high)
+- 2x 6-Pin 2.54mm Dupont female pin header (socket 8,5mm high)
 - 2x 6-Pin 2.54mm Dupont male pin header (pin 6mm high)
 - If PCB is not pre-assembled:
   - 1x Inolux IN-P55TATRGB
   - 3x S8050 (SMD type SOT-23)
   - SMD type 1206 resistors:
     - 3x 15,5 kOhm (or slightly lower)
-    - 2x 10,8 Ohm (or slightly higher)
-    - 1x 60,5 Ohm (or slightly higher)
+    - 2x 11 Ohm (or slightly higher)
+    - 1x 61 Ohm (or slightly higher)
 - battery contacts (with spring)
 - (optional) 100 mm 2,4 Ghz Antenna
 - an LED light diffusion filter. Dimensions: 9,5cm x 14,5cm  (15.1mm inner cylinder radius)
