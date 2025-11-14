@@ -4,7 +4,7 @@
 
 ### Base Parts, Buttons, Caps, Battery Wall
 
-Filament: PLA or PETG
+Filament: PLA or PETG. Cap for the tube: White
 
 Base Profile: 0.20 mm STRUCTURAL @ MK4S 0.4
 
@@ -22,7 +22,7 @@ Overhang Threshold: 0 (Prusa), 24 (Orca)
 
 ### Lens Holder
 
-Filament: PLA or PETG
+Filament: White PLA or PETG
 
 Base Profile: 0.20 mm STRUCTURAL @ MK4S 0.4
 
