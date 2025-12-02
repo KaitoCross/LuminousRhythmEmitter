@@ -4,7 +4,8 @@
 - power switch: MFP 120 by Knitter-Switch
 - Any 18350 Li-ion battery with a **protection circuit** (preventing deep discharge)
 - Button: generic 6x6x5mm pushbutton
-- 20mm ø LED Lens (45° or 60°, testing), max 11mm high
+- ~~20mm ø LED Lens (60°), max 11mm high~~
+- screw the lens actually, it's better without
 - The custom printed PCB
   - I recommend ordering the custom PCB through JLCPCB
 - 2x 6-Pin 2.54mm Dupont female pin header (socket 8,5mm high)
@@ -70,7 +71,7 @@ Start with the half with the rectangular cutout on the top. Place the PCB on top
 
 To make working with the pushbutton easier, you need to straighten the unused legs, aligning them with the case of the button itself. Now, pull the pushbutton though the D-shaped hole, with the wires facing the wall. Place the button cap on the pushbutton. Put the rectangular power switch into it's holder near the XIAO.
 
-Now, put the lens into the lens holder with the flat side of the lens facing the small end of the holder. Push it all the way in. Place the lens holder on top of the PCB.
+Now, put the ~~lens~~ reflector into the ~~lens~~ reflector holder with the ~~flat~~ open side of the ~~lens~~ reflector facing the small end of the holder. Push it all the way in. Place the ~~lens~~ reflector holder on top of the PCB.
 
 Now put the other half of the penlight base on top and close the case, making sure the buttons fit into the other half as well. Then you can screw on the top part. Into the top part, you can then place your light diffusion filter. You can then close the top part by screwing on the respective cap.
 

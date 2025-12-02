@@ -20,7 +20,7 @@ Support Style: Grid (Prusa), Slim Tree (Orca)
 
 Overhang Threshold: 0 (Prusa), 24 (Orca)
 
-### Lens Holder
+### Reflector & Reflector Holder
 
 Filament: White PLA or PETG
 
@@ -28,7 +28,7 @@ Base Profile: 0.20 mm STRUCTURAL @ MK4S 0.4
 
 Infill: 100%
 
-Brim: 5mm
+Brim: none
 
 Supports 0.36mm
 
