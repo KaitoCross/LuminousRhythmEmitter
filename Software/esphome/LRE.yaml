@@ -54,23 +54,23 @@ output:
     pin: GPIO3
     id: led_r
     #Max percentage (66,66%) ^ gamma correction = max power
-    max_power: 90%
+    #max_power: 90%
     
   - platform: ledc
     pin: GPIO4
     id: led_g
-    max_power: 70%
+    max_power: 50%
     
   - platform: ledc
     pin: GPIO2
     id: led_b
-    max_power: 50%
+    max_power: 65%
 
 light:
   - platform: rgb
     name: "Penlight LED"
     id: pen_rgb
-    gamma_correct: 2.2
+    gamma_correct: 2.8
     red: led_r
     green: led_g
     blue: led_b
@@ -138,16 +138,16 @@ esp32_ble_server:
                   float blue = 0.0f;
 
                   if (x.size() >= 3) {
-                    if (x[0] > 0)
-                      red = x[0] / 255.0f;
-                    if (x[1] > 0)
-                      green = x[1] / 255.0f;
-                    if (x[2] > 0)
-                      blue = x[2] / 255.0f;
-                  }
-                  if ((red == 0.0f) && (green == 0.0f) && (blue == 0.0f)) {
-                    auto call = id(pen_rgb).turn_off();
-                    call.perform();
+                    int imod = 0;
+                    if (x.size() == 4){ // why. Linux BT GATTTOOL sends 4 bytes. First is zero. smh.
+                      imod = 1;
+                    }
+                    if (x[0+imod] > 0)
+                      red = x[0+imod] / 255.0f;
+                    if (x[1+imod] > 0)
+                      green = x[1+imod] / 255.0f;
+                    if (x[2+imod] > 0)
+                      blue = x[2+imod] / 255.0f;
                   }
                   else {
                     auto call = id(pen_rgb).turn_on();
