@@ -149,6 +149,10 @@ esp32_ble_server:
                     if (x[2+imod] > 0)
                       blue = x[2+imod] / 255.0f;
                   }
+                  if ((red == 0.0f) && (green == 0.0f) && (blue == 0.0f)) {
+                    auto call = id(pen_rgb).turn_off();
+                    call.perform();
+                  }
                   else {
                     auto call = id(pen_rgb).turn_on();
                     call.set_rgb(red, green, blue);
