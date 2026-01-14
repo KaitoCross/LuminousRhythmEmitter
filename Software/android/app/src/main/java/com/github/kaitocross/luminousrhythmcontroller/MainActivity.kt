@@ -1,6 +1,8 @@
 package com.github.kaitocross.luminousrhythmcontroller
 
 import android.Manifest
+import android.app.job.JobInfo
+import android.app.job.JobScheduler
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCallback
@@ -31,6 +33,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -45,6 +48,8 @@ private const val LOG_BT = "BLE"
 
 class MainActivity : ComponentActivity() {
     companion object {
+        // Unique job ID for the Bluetooth scan, to ensure only one instance is started
+        private const val BT_SCAN_JOB_ID = 42
         // BLE device name characteristics are limited to 20 bytes
         private const val LUMINOUS_DEVICE_NAME = "luminousrhythmemitte"
         // See LRE.yaml for custom values
@@ -66,6 +71,16 @@ class MainActivity : ComponentActivity() {
             }
         }
         initBluetooth()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        startBluetoothScan()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        stopBluetoothScan()
     }
 
     /*override fun onRequestPermissionsResult(
@@ -92,8 +107,6 @@ class MainActivity : ComponentActivity() {
                 if (!permissions.all { permission -> permission.value }) {
                     // TODO Need to display an error that BT permissions are required
                     finishAndRemoveTask()
-                } else {
-                    startBluetoothScan()
                 }
             }
         req.launch(
@@ -115,6 +128,7 @@ class MainActivity : ComponentActivity() {
 
     private fun updateColor(color: Color) : Unit {
         val argb = color.toArgb()
+        Log.i(LOG_BT, "updating color on all connected devices to $argb")
         val rgb = byteArrayOf((argb shr 16).toByte(), (argb shr 8).toByte(), argb.toByte())
         Handler(mainLooper).post {
             if (checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
@@ -133,6 +147,7 @@ class MainActivity : ComponentActivity() {
                             } else {
                                 Log.i(LOG_BT, "couldn't discover any services on ${gatt?.device?.address} (status: $status)")
                             }
+                            gatt?.disconnect()
                         }
 
                         override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
@@ -141,8 +156,10 @@ class MainActivity : ComponentActivity() {
                             if (status == BluetoothGatt.GATT_SUCCESS) {
                                 if (newState == BluetoothGatt.STATE_CONNECTED) {
                                     Log.i(LOG_BT, "discovering services on ${gatt?.device?.address}")
-                                    if (!(gatt?.discoverServices() ?: false)) {
-                                        Log.i(LOG_BT, "can't initiate service scan on ${gatt?.device?.address}")
+                                    if (checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+                                        if (!(gatt?.discoverServices() ?: false)) {
+                                            Log.i(LOG_BT, "can't initiate service scan on ${gatt?.device?.address}")
+                                        }
                                     }
                                 }
                             }
@@ -154,7 +171,10 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private val leScanCallback = object : ScanCallback() {
+    private var scanning = false
+    private val foundDevices : MutableSet<BluetoothDevice> = HashSet()
+
+    val leScanCallback = object : ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
             super.onScanResult(callbackType, result)
             if (result != null) {
@@ -162,47 +182,50 @@ class MainActivity : ComponentActivity() {
                     Log.i(LOG_BT, "adding device ${result.device}")
                     foundDevices.add(result.device)
                 }
+            } else {
+                Log.i(LOG_BT, "scan result was null")
             }
+        }
+
+        override fun onScanFailed(errorCode: Int) {
+            super.onScanFailed(errorCode)
+            Log.i(LOG_BT, "scan failed $errorCode")
         }
     }
 
-    private var scanning = false
-    private val foundDevices : MutableSet<BluetoothDevice> = HashSet()
+    private fun stopBluetoothScan() {
+        if (checkSelfPermission(Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED) {
+            val manager = getSystemService(BLUETOOTH_SERVICE) as BluetoothManager
+            val bluetoothLeScanner = manager.adapter.bluetoothLeScanner
+            Log.i(LOG_BT, "stopping scan")
+            bluetoothLeScanner.stopScan(leScanCallback)
+            scanning = false
+        }
+    }
+
     private fun startBluetoothScan() {
         if (checkSelfPermission(Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED) {
             val manager = getSystemService(BLUETOOTH_SERVICE) as BluetoothManager
             val bluetoothLeScanner = manager.adapter.bluetoothLeScanner
-            if (!scanning) {
-                // stop scanning after 10 seconds.
-                Handler(mainLooper).postDelayed({
-                    Log.i(LOG_BT, "stopping scan, sleeping")
-                    scanning = false
-                    bluetoothLeScanner.stopScan(leScanCallback)
-                    // wait 10 seconds, then restart the scan
-                    Handler(mainLooper).postDelayed({
-                        startBluetoothScan()
-                    }, 10000)
-                }, 10000)
-                // TODO filter for our characteristics
-                val filter = listOf(ScanFilter.Builder().setDeviceName(LUMINOUS_DEVICE_NAME).build())
-                /*synchronized(foundDevices) {
-                    foundDevices.clear()
-                }*/
-                Log.i(LOG_BT, "starting scan")
-                scanning = true
-                bluetoothLeScanner.startScan(filter, ScanSettings.Builder().build(), leScanCallback)
-            }
+            val filter =
+            Log.i(LOG_BT, "starting scan")
+            scanning = true
+            bluetoothLeScanner.startScan(
+                listOf(ScanFilter.Builder().setDeviceName(LUMINOUS_DEVICE_NAME).build()),
+                ScanSettings.Builder().build(),
+                leScanCallback
+            )
         }
     }
-
 }
+
 
 @Composable
 fun RemoteControl(modifier: Modifier = Modifier, updateColor: (color: Color) -> Unit = {}) {
-    var colorHue by remember { mutableFloatStateOf(0f) }
-    var colorSaturation by remember { mutableFloatStateOf(1f) }
-    var colorValue by remember { mutableFloatStateOf(1f) }
     Column(modifier = modifier) {
+        var colorHue by rememberSaveable { mutableFloatStateOf(0f) }
+        var colorSaturation by rememberSaveable { mutableFloatStateOf(1f) }
+        var colorValue by rememberSaveable { mutableFloatStateOf(1f) }
         Text(
             text = "",
             modifier = Modifier
@@ -268,7 +291,7 @@ fun RemoteControl(modifier: Modifier = Modifier, updateColor: (color: Color) -> 
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun RemoteControlPreview() {
     LuminousRhythmControllerTheme {
         RemoteControl()
     }
