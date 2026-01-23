@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Luminous Rhythm Controller</string>
+    <string name="bluetooth_description">Bluetooth</string>
+    <string name="discovered_label">Discovered Devices</string>
+</resources>
