@@ -43,7 +43,7 @@ globals:
    - id: color_presets # If you want more colors on your penlight, add them to initial_value as hex value and adjust the number in type (increasing or decreasing). Color 0x000000 turns off the LED
      type: int[13]
      restore_value: yes
-     initial_value: '{0xff0000,0xe05c9d,0xff57b2,0x00e6ff,0x00ff21,0xffff00,0xff0088,0x7900ff,0x57ff00,0xff6600,0xffffff,0x003fff,0x000000}'
+     initial_value: '{0xff0000,0xff00e6,0xff91bf,0x00d1ff,0x00ff84,0xffff00,0xff0088,0x9e64ff,0x57ff00,0xff9844,0xffffff,0x003fff,0x000000}'
    - id: current_preset
      type: int
      restore_value: no
